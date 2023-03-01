@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="./img/favicon.svg" type="image/x-icon" />
+    <title>SpinBetter</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <script>
+      let fingerPrint = null;
+      // Initialize the agent at application startup.
+      const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+        .then(FingerprintJS => FingerprintJS.load())
+    
+      // Get the visitor identifier when you need it.
+      fpPromise
+        .then(fp => fp.get())
+        .then(result => {
+          // This is the visitor identifier:
+          const visitorId = result.visitorId
+          console.log(visitorId);
+          fingerPrint = visitorId
+        })
+    </script>
+  </head>
+  <body class="page">
+    <div class="layout">
+      <div id="container">
+        <div class="logo_wrap">
+          <a onclick="redirectTo()" class="logo">
+            <img src="./img/logo-v24.svg" alt=""
+          /></a>
+        </div>
+
+        <div class="txt_wrap">
+          <span>Крути колесо!</span>
+        </div>
+
+        <div class="wheel_wrap">
+          <div class="wheel_winframe"></div>
+
+          <img
+            src="./img/wheel-spinner.png"
+            alt=""
+            class="wheel_spinner wheel_spinner_animated"
+          />
+
+          <div class="wheel_btn spin"></div>
+        </div>
+      </div>
+
+      <div id="footer">
+        <div class="pay">
+          <img src="./img/pay-desk.png" alt="" class="desk" />
+          <img src="./img/pay-mob.png" alt="" class="mob" />
+        </div>
+      </div>
+
+      <div class="popup_overlay">
+        <div class="popup_window">
+          <div class="popup_window_main">
+            <div class="popup_txt_1">
+              <span>Результат прокрута</span>
+            </div>
+            <div class="gradient-line"></div>
+            <div class="popup_txt_2">
+              <span>Бонус 100%</span>
+            </div>
+            <div class="popup_txt_3">
+              <span>на первый депозит!</span>
+            </div>
+            <div class="gradient-line"></div>
+            <div class="popup_btn_wrap">
+              <a class="popup_btn">
+                <span>Забрать бонус</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form_conatiner">
+          <div class="form_conatiner_main">
+            <div class="popup_txt_2">
+                <span>Бонус 100%</span>
+            </div>
+            <div class="popup_txt_3">
+                <span>на первый депозит!</span>
+            </div>
+            <div class="form_switch">
+                <input type="radio" checked name="formType" id="email"><label for="email">По E-mail</label>
+                <input type="radio" name="formType" id="tel"><label for="tel">По телефону</label>
+            </div>
+    
+            <form class="email_form" action="#">
+                <div class="input_container">
+                  <input type="text" name="email" id="email_input" placeholder="Email">
+                  <div class="email_invalid"></div>
+                  <div class="email_error errors"></div>
+                </div>
+                <div class="input_container">
+                  <input type="password" name="password" placeholder="Пароль" id="password_email">
+                  <div class="pass_email_invalid"></div>
+                </div>
+                <select name="currency" id="email_select">
+                    <option value="rub">RUB</option>
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="usdt">USDT</option>
+                    <option value="kzt">KZT</option>
+                </select>
+
+                <div class="dropdown" id="dropdown_email">
+                  <div class="selected"><div>RUB</div></div>
+                  <div class="options">
+                    <div data-value="rub">RUB</div>
+                    <div data-value="usd">USD</div>
+                    <div data-value="eur">EUR</div>
+                    <div data-value="usdt">USDT</div>
+                    <div data-value="kzt">KZT</div>
+                  </div>
+                </div>
+    
+                <div class="submit_container">
+                  <input type="submit" id="email_submit" value="Зарегестрироваться" disabled>
+                  <div class="default_email_error errors"></div>
+                </div>
+            </form>
+    
+    
+            <form class="tel_form" action="#">
+                <div class="input_container">
+                  <input type="tel" name="tel" id="tel_input" maxlength="12" value="+7" oninput="this.value=this.value.replace(/[^0-9\+]/g,'');">
+                  <div class="tel_invalid"></div>
+                  <div class="tel_error errors"></div>
+                </div>
+                <div class="input_container">
+                  <input type="password" name="password" placeholder="Пароль" id="password_tel">
+                  <div class="pass_tel_invalid"></div>
+                </div>
+                <select name="currency" id="tel_select">
+                    <option selected value="rub">RUB</option>
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="usdt">USDT</option>
+                    <option value="kzt">KZT</option>
+                </select>
+
+                <div class="dropdown" id="dropdown_tel">
+                  <div class="selected"><div>RUB</div></div>
+                  <div class="options">
+                    <div data-value="rub">RUB</div>
+                    <div data-value="usd">USD</div>
+                    <div data-value="eur">EUR</div>
+                    <div data-value="usdt">USDT</div>
+                    <div data-value="kzt">KZT</div>
+                  </div>
+                </div>
+                
+                <div class="submit_container">
+                  <input type="submit" id="tel_submit" value="Зарегестрироваться" disabled>
+                  <div class="default_tel_error errors"></div>
+                </div>
+            </form>
+    
+            <div class="discription">
+                Нажимая кнопку “Зарегистрироваться” Вы подтверждаете, что Вы старше 18 лет, принимаете Правила и условия и согласны с политикой конфиденциальности.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/main.js"></script>
+  
+  <!-- <script defer>
+    function redirectTo() {
+      window.location.href = window.serverData.clickUrl;
+    }
+  </script> -->
+</html>
