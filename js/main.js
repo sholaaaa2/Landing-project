@@ -1,5 +1,5 @@
 window.onload = function () {
-  var $button = $(".wheel_btn"),
+  const $button = $(".wheel_btn"),
     $spinner = $(".wheel_spinner"),
     $popupOverlay = $(".popup_overlay"),
     $popupWindow = $(".popup_window"),
@@ -25,28 +25,11 @@ window.onload = function () {
   $.get("https://api.spinbetter.org/api/recaptcha/token")
   .done(function(data) {
       $siteKey = data.siteKey;
-      console.log($siteKey + " siteKey")
       renderRecaptcha();
   })
   .fail(function(error) {
       console.log("Error: " + error.statusText);
   });
-
-  function renderRecaptcha() {
-    var script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js?render=' + $siteKey;
-    document.body.appendChild(script);
-    console.log(script.src);
-  }
-
-    
-
-  function getToken() {
-    grecaptcha.execute($siteKey, {action: 'submit'}).then(function(token) {
-      console.log(token + " 1");
-      $token = token;
-    });
-  }
 
   $formEmail.submit(function (e) {
     e.preventDefault();
@@ -65,10 +48,6 @@ window.onload = function () {
         reqest["visitor"]  = fingerPrint;
         reqest["clientToken"]  = $token;
 
-        console.log($token + " 2");
-        console.log(fingerPrint + " fingerPrint")
-        console.log(reqest)
-
         $.ajax({
           type: 'POST',
           url: 'https://api.spinbetter.org/api/users',
@@ -84,14 +63,13 @@ window.onload = function () {
           error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error:', jqXHR.responseJSON["error"]);
 
-            reqestErrors(jqXHR.responseJSON["error"], "email")
+            reqestErrors(jqXHR.responseJSON["error"], "email");
           }
         });
     }, 500)
   })
   $formTel.submit(function (e) {
     e.preventDefault();
-    console.log($telInput.val().replace("+",""))
     let reqest = {
       "visitor": null,
       "clientToken": null,
@@ -102,7 +80,7 @@ window.onload = function () {
       "send": true,
       "bonus": 2
     }
-    getToken() 
+    getToken(); 
     setTimeout(()=>{
         reqest["visitor"]  = fingerPrint;
         reqest["clientToken"]  = $token;
@@ -131,39 +109,8 @@ window.onload = function () {
             reqestErrors(jqXHR.responseJSON["error"], "tel")
           }
         });
-    }, 500)
-  })
-  
-  function reqestErrors(request, type) {
-    switch (request) {
-      case "PHONE_IN_USE":
-        showError("Такой номер уже зарегистрирован", type)
-        break;
-      case "EMAIL_IN_USE":
-        showError("Такой E-mail уже используется", type)
-        break;
-      case "INVALID_PHONE":
-      case "PARSE_PHONE":
-      case "MATCH_PHONE":
-        showError("Номер телефона указан неверно", type)
-        break;
-      case "INVALID_CAPTCHA":
-        showError("Ошибка. К сожалению, нам не удалось проверить подлинность капчи.", "default_" + type)
-        break;                
-      default:
-        showError("Произошла ошибка. Пожалуйста, повторите попытку позже.","default_" + type)
-        break;
-    }
-  }
-  function showError(text, type) {
-    const selector ="." + type + "_error"
-    var img = document.createElement('img');
-    img.src = "./img/warning.svg";
-    
-    $(selector).text(text)
-    $(selector).prepend(img)
-    
-  }
+    }, 500);
+  });
 
   $('#dropdown_tel .options').hide();
   $('#dropdown_email .options').hide();
@@ -174,10 +121,9 @@ window.onload = function () {
     $(this).toggleClass('open');
     e.stopPropagation();
   });
-
   $('#dropdown_tel .options').click(function(e) {
-    var value = $(e.target).data('value');
-    var text = $(e.target).text();
+    let value = $(e.target).data('value');
+    let text = $(e.target).text();
 
     $('#tel_select').val(value);
     $('#dropdown_tel .selected div').text(text);
@@ -185,10 +131,9 @@ window.onload = function () {
 
     $('.dropdown .options').hide();
   });
-
   $('#dropdown_email .options').click(function(e) {
-    var value = $(e.target).data('value');
-    var text = $(e.target).text();
+    let value = $(e.target).data('value');
+    let text = $(e.target).text();
 
     $('#email_select').val(value);
     $('#dropdown_email .selected div').text(text);
@@ -196,26 +141,20 @@ window.onload = function () {
 
     $('.dropdown .options').hide();
   });
-
   $('.popup_overlay').click(function () {
     $('#dropdown_tel .options').hide();
     $('#dropdown_email .options').hide();
     $('.dropdown .selected').removeClass('open');
-  })
-
-
+  });
   $button.click(function () {
     if ($button.hasClass("spin")) {
       spin();
     }
   });
-
   $popupBtn.click(function () {
     $popupWindow.fadeOut();
     $formConatiner.fadeIn();
-  })
-
-
+  });
   $emailInput.on('input', function () {
     if (validEmail($(this).val())) {
       $emailInvalid.text("");
@@ -234,7 +173,7 @@ window.onload = function () {
   $passwordEmail.on('input', function () {
     if ($(this).val().length>=6) {
       $passEmailInvalid.text("");
-      $(this).attr('data-invalid', 'false')
+      $(this).attr('data-invalid', 'false');
       if (validPassword($(this).val())) {
         if (validEmail($emailInput.val())) {
           $emailSubmit.prop('disabled', false);
@@ -271,7 +210,7 @@ window.onload = function () {
   $passwordTel.on('input', function () {
     if ($(this).val().length>=6) {
       $passTelInvalid.text("");
-      $(this).attr('data-invalid', 'false')
+      $(this).attr('data-invalid', 'false');
       if (validPassword($(this).val())) {
         if (validPhone($telInput.val())) {
           $telSubmit.prop('disabled', false);
@@ -294,6 +233,49 @@ window.onload = function () {
   
 
 
+
+  function reqestErrors(request, type) {
+    switch (request) {
+      case "PHONE_IN_USE":
+        showError("Такой номер уже зарегистрирован", type)
+        break;
+      case "EMAIL_IN_USE":
+        showError("Такой E-mail уже используется", type)
+        break;
+      case "INVALID_PHONE":
+      case "PARSE_PHONE":
+      case "MATCH_PHONE":
+        showError("Номер телефона указан неверно", type)
+        break;
+      case "INVALID_CAPTCHA":
+        showError("Ошибка. К сожалению, нам не удалось проверить подлинность капчи.", "default_" + type)
+        break;                
+      default:
+        showError("Произошла ошибка. Пожалуйста, повторите попытку позже.","default_" + type)
+        break;
+    }
+  };
+  function showError(text, type) {
+    const selector ="." + type + "_error";
+    let img = document.createElement('img');
+    img.src = "./img/warning.svg";
+    
+    $(selector).text(text)
+    $(selector).prepend(img)
+    
+  };
+  function renderRecaptcha() {
+    let script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js?render=' + $siteKey;
+    document.body.appendChild(script);
+    console.log(script.src);
+  };
+  function getToken() {
+    grecaptcha.execute($siteKey, {action: 'submit'}).then(function(token) {
+      console.log(token + " 1");
+      $token = token;
+    });
+  };
   function spin() {
     $button.removeClass("spin").addClass("disabled");
     $spinner
@@ -304,20 +286,19 @@ window.onload = function () {
       $popupOverlay.fadeIn();
       $popupWindow.fadeIn();
     }, 4500);
-  }
-
+  };
   function validEmail(email) {
     let reg =/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-    return reg.test(email)
-  }
+    return reg.test(email);
+  };
   function validPhone(phone) {
     let reg = /^\+7\s?\d{3}\s?\d{3}\s?\d{2}\s?\d{2}$/;
     return reg.test(phone);
-  }
+  };
   function validPassword(password) {
     let reg = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/ ;
     return reg.test(password)
-  }
+  };
 
   switch (localStorage.currentSpin) {
     case "HTMLC_1466_v24_spin":
